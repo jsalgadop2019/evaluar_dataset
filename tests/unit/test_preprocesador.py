@@ -4,7 +4,7 @@
 import pytest
 import pandas as pd
 import numpy as np
-from evaluar_dataset.app.preprocesador import PreprocesadorDatos, CargadorDatos, CargadorCSV  # Asumiendo el archivo anterior es preprocesador.py
+from .app.preprocesador import PreprocesadorDatos, CargadorDatos, CargadorCSV  # Asumiendo el archivo anterior es preprocesador.py
 
 # Pruebas unitarias
 
