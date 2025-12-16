@@ -185,4 +185,4 @@ if __name__ == "__main__":
     df_procesado = preprocesador.procesar()
 
     # Mostrar resultado (opcional)
-    print(df_procesado.head())
+    print(df_procesado.head(100))
