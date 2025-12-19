@@ -71,7 +71,7 @@ La implementación sigue estrictamente los requerimientos funcionales y técnico
 
     git clone https://github.com/jsalgadop2019/evaluar_dataset.git
 
-    cd evaluar-dataset
+    cd evaluar_dataset
 
 ### 2. Instalar dependencias
 
@@ -83,7 +83,7 @@ La implementación sigue estrictamente los requerimientos funcionales y técnico
 
     bash
 
-    python preprocesador.py
+    python app/preprocesador.py
 
 Esto realizará:
 
