@@ -153,7 +153,7 @@ class PreprocesadorDatos:
 
         # Verificar columnas críticas
         # columnas_criticas = ['fech_registro', 'nombre_cliente_raw', 'monto', 'categora_productotipo', 'score_15']
-        columnas_criticas = ['monto', 'categora_productotipo', 'score_15']
+        columnas_criticas = ['monto', 'score_15']
         for col in columnas_criticas:
             if col in reporte and reporte[col] / 100 > self.umbral_nulos:
                 raise ValueError(
