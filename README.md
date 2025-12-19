@@ -42,7 +42,7 @@ La implementación sigue estrictamente los requerimientos funcionales y técnico
 - Generación automática de reporte de porcentaje de valores nulos por columna.
 - Validación de columnas críticas:
   - `monto`
-  - `es_fraude`
+  - `score_15`
 - Si alguna supera el umbral definido (por defecto **5%**), se lanza una excepción controlada recomendando **descartar el dataset** y solicitar nuevos datos.
 
 ## Requisitos Técnicos Cumplidos
