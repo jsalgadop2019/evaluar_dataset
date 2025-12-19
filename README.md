@@ -5,17 +5,19 @@ Este repositorio contiene una solución modular y extensible en Python para la i
 La implementación sigue estrictamente los requerimientos funcionales y técnicos solicitados, utilizando Programación Orientada a Objetos (POO), buenas prácticas de código y pruebas automatizadas.
 
 ## Estructura del Proyecto
-    .
-
-    ├── dataset_sucio_ventas.csv      # Dataset de ejemplo (sucio)
-    ├── preprocesador.py              # Código principal (clases y lógica)
-    ├── test_preprocesador.py         # Suite de pruebas unitarias e integrales (pytest)
     ├── .github/
-        └── workflows/
-            └── ci.yml                # Workflow de GitHub Actions para CI
-    ├── README.md                     # Este archivo
+        ├── workflows/
+            └── flake8-pytest.yml     # Workflow de GitHub Actions para CI
+    ├── app/
+        └── preprocesador.py          # Código principal (clases y lógica)
+    ├── tests
+        ├── integration
+            └── test_integracion.py
+        ├── unit
+            └── test_unitarias.py
+    └── dataset_sucio_ventas.csv      # Dataset de ejemplo (sucio)
+    └── README.md                     # Este archivo
     └── requirements.txt              # Dependencias del proyecto (opcional, generado si es necesario)
-
 
 ## Funcionalidades Implementadas
 
@@ -64,11 +66,12 @@ La implementación sigue estrictamente los requerimientos funcionales y técnico
 ## Cómo Ejecutar el Programa
 
 ### 1. Clonar el repositorio
+
     bash
 
-    git clone https://github.com/tu-usuario/preprocesador-fraude.git
+    git clone https://github.com/jsalgadop2019/evaluar_dataset.git
 
-    cd preprocesador-fraude
+    cd evaluar-dataset
 
 ### 2. Instalar dependencias
 
@@ -98,13 +101,14 @@ Esto realizará:
 
     bash
 
-    pytest test_preprocesador.py -v
+    pytest tests/integration/ -v
+    pytest tests/unit/ -v
 
 ### 5. Verificar CI (GitHub Actions)
 
-Al hacer push o pull request a la rama main, GitHub Actions ejecutará automáticamente:
+Al hacer `push` o `pull` request a la rama `main`, GitHub Actions ejecutará automáticamente:
 
-- Linter (flake8)
+- Linter (`flake8`)
 
 - Todas las pruebas
 
@@ -112,7 +116,7 @@ Al hacer push o pull request a la rama main, GitHub Actions ejecutará automáti
 
 Puedes modificar el umbral de calidad al instanciar el preprocesador:
 
-    Python
+    python
 
     preprocesador = PreprocesadorDatos(df, umbral_nulos=0.10)  # 10% en lugar de 5%
 
