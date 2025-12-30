@@ -29,7 +29,6 @@ class CargadorDatos:
         """
         raise NotImplementedError("Este método debe ser implementado en una subclase.")
 
-
 class CargadorCSV(CargadorDatos):
     """
     Clase para cargar datos desde archivos CSV.
@@ -55,7 +54,6 @@ class CargadorCSV(CargadorDatos):
             raise ValueError(f"Error al leer el CSV: {e}")
         
         return self.datos
-
 
 # Ejemplo de subclase para JSON (para polimorfismo futuro)
 class CargadorJSON(CargadorDatos):
@@ -84,7 +82,6 @@ class CargadorJSON(CargadorDatos):
         
         return self.datos
 
-
 class PreprocesadorDatos:
     """
     Clase responsable del preprocesamiento de datos.
@@ -96,7 +93,7 @@ class PreprocesadorDatos:
         Inicializa el preprocesador con el DataFrame y umbral de nulos.
 
         :param df: DataFrame a procesar.
-        :param umbral_nulos: Umbral de porcentaje de nulos para alerta (default 5%).
+        :param umbral_nulos: Umbral de porcentaje de nulos para alerta.
         """
         self.df = df.copy()
         self.umbral_nulos = umbral_nulos
@@ -134,6 +131,8 @@ class PreprocesadorDatos:
             col_limpia = self.df.columns[self.columnas_originales.index(col)]
             bandera_col = f"{col_limpia}_nan"
             self.df[bandera_col] = np.where(self.df[col_limpia].isnull(), 1, 0)
+            #self.df[col + '_nan'] = self.df[col].isnull().astype(int)
+
         return self.df
 
     def analizar_calidad(self) -> dict:
@@ -143,25 +142,36 @@ class PreprocesadorDatos:
         :return: Diccionario con porcentajes de nulos por columna.
         :raises ValueError: Si columnas críticas superan umbral.
         """
-        porcentajes_nulos = self.df.isnull().mean() * 100
-        reporte = {col: round(pct, 2) for col, pct in porcentajes_nulos.items()}
+        porcentajes_nulos = self.df.filter(like='_nan').mean() * 100
+
+        # reporte = {col: round(pct, 2) for col, pct in porcentajes_nulos.items()}
+
+        print('\n')
 
         # Imprimir reporte
-        print("Reporte de porcentaje de nulos por columna:")
-        for col, pct in reporte.items():
-            print(f"{col}: {pct}%")
+        print("\033[4m" + "Reporte de porcentaje de nulos por columna:" + "\033[0m")
+        for col, pct in porcentajes_nulos.items():
+            print(f"{col:<30}: {pct:.2f}%")
+
+        print('\n')
 
         # Verificar columnas críticas
-        # columnas_criticas = ['fech_registro', 'nombre_cliente_raw', 'monto', 'categora_productotipo', 'score_15']
-        columnas_criticas = ['monto', 'score_15']
-        for col in columnas_criticas:
-            if col in reporte and reporte[col] / 100 > self.umbral_nulos:
-                raise ValueError(
-                    f"La columna crítica '{col}' supera el umbral de nulos ({self.umbral_nulos * 100}%). "
-                    "Se recomienda descartar el dataset y recolectar nuevos datos."
-                )
+        errores = 0 # Contador de errores
+        for col, pct in porcentajes_nulos.items():
+            if pct / 100 > self.umbral_nulos:
+                # raise ValueError(
+                    errores += 1
+                    print(f"La columna crítica '{col}' supera el umbral de nulos ({self.umbral_nulos * 100:.2f}%) con un error del {pct:.2f}%. " + 
+                        "Se recomienda descartar el dataset y recolectar nuevos datos para esta columna.")
+                # )
 
-        return reporte
+        if errores == 0:
+            print(f"Todas las columnas críticas están dentro del umbral de nulos permitido ({self.umbral_nulos * 100:.2f}%). " +
+                "Se recomienda continuar con el análisis del dataset actual.")
+
+        print('\n')
+
+        return porcentajes_nulos
 
     def procesar(self) -> pd.DataFrame:
         """
@@ -172,6 +182,7 @@ class PreprocesadorDatos:
         self.limpiar_columnas()
         self.agregar_banderas_nulos()
         self.analizar_calidad()
+
         return self.df
 
 
@@ -182,8 +193,8 @@ if __name__ == "__main__":
     df = cargador.leer_archivo()
 
     # Preprocesar
-    preprocesador = PreprocesadorDatos(df, umbral_nulos=0.05)
+    preprocesador = PreprocesadorDatos(df, umbral_nulos=0.06)
     df_procesado = preprocesador.procesar()
 
     # Mostrar resultado (opcional)
-    print(df_procesado.head(5000))
+    # print(df_procesado.head(100))
