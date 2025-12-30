@@ -41,8 +41,14 @@ La implementación sigue estrictamente los requerimientos funcionales y técnico
 ### D. Análisis de Calidad y Toma de Decisiones (Quality Gate)
 - Generación automática de reporte de porcentaje de valores nulos por columna.
 - Validación de columnas críticas:
-  - `monto`
-  - `score_15`
+  - `transaction_id_nan`
+  - `fech_registro_nan`
+  - `nombre_cliente_raw_nan`
+  - `monto_nan`
+  - `categora_productotipo_nan`
+  - `score_15_nan`
+  - `notes_comments_nan`
+  - `es_fraude_nan`
 - Si alguna supera el umbral definido (por defecto **5%**), se lanza una excepción controlada recomendando **descartar el dataset** y solicitar nuevos datos.
 
 ## Requisitos Técnicos Cumplidos
@@ -118,7 +124,7 @@ Puedes modificar el umbral de calidad al instanciar el preprocesador:
 
     python
 
-    preprocesador = PreprocesadorDatos(df, umbral_nulos=0.10)  # 10% en lugar de 5%
+    preprocesador = PreprocesadorDatos(df, umbral_nulos=0.07)  # 7% en lugar de 5%
 
 ## Extensibilidad
 
