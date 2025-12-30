@@ -159,11 +159,12 @@ class PreprocesadorDatos:
         errores = 0 # Contador de errores
         for col, pct in porcentajes_nulos.items():
             if pct / 100 > self.umbral_nulos:
-                # raise ValueError(
-                    errores += 1
-                    print(f"La columna crítica '{col}' supera el umbral de nulos ({self.umbral_nulos * 100:.2f}%) con un error del {pct:.2f}%. " + 
-                        "Se recomienda descartar el dataset y recolectar nuevos datos para esta columna.")
-                # )
+                errores += 1
+                raise ValueError(
+                    f"La columna crítica '{col}' supera el umbral de nulos ({self.umbral_nulos * 100:.2f}%) con un error del {pct:.2f}%. "
+                    "Se recomienda descartar el dataset y recolectar nuevos datos para esta columna."
+
+                )
 
         if errores == 0:
             print(f"Todas las columnas críticas están dentro del umbral de nulos permitido ({self.umbral_nulos * 100:.2f}%). " +
